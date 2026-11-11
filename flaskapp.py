@@ -28,7 +28,6 @@ def load_rounds(csv_path=CSV_PATH):
         lines = [',' if line.isspace() else line for line in f][1:]# Skip header
 
         for row in csv.DictReader(lines, fieldnames=["song_name", "artist_name", "embed_link", "artist_image_url"],restval=""):
-            print(row.values())
             if not any((v or "").strip() for v in row.values()):
                 rounds.append([])
                 continue
@@ -86,6 +85,19 @@ TEMPLATE = """
   nav a { background: #1db954; color: #000; text-decoration: none; font-weight: 700;
           padding: 10px 22px; border-radius: 24px; }
   nav a:disabled { opacity: .3; }
+  .central-reveal {
+    margin: 12px auto 0;
+    display: block;
+    background: #1db954;
+    color: #000;
+    border: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 28px;
+    border-radius: 24px;
+    cursor: pointer;
+    }
+    .central-reveal:hover { background: #1ed760; }
 </style>
 </head>
 <body>
@@ -104,12 +116,13 @@ TEMPLATE = """
       <div id="embed-{{ loop.index }}"></div>
       <div class="title-shield"></div>
     </div>
+    <div style="font-weight: 600;">{{ track.artist }}</div>
     <button class="reveal" onclick="reveal({{ loop.index }})">Reveal answer</button>
-    <div class="answer">{{ track.artist }} — {{ track.song }}</div>
+    <div class="answer">{{ track.song }}</div>
   </div>
   {% endfor %}
 </div>
-
+<button class="central-reveal" onclick="revealAll()">Reveal all answers</button>
 <nav>
   {% if page > 0 %}<a href="/{{ page - 1 }}">&#8592; Previous</a>{% endif %}
   {% if page < rounds|length - 1 %}<a href="/{{ page + 1 }}">Next round &#8594;</a>{% endif %}
@@ -179,6 +192,9 @@ document.addEventListener('keydown', (e) => {
   toggle(spaceIndex + 1);
   spaceIndex++;
 });
+function revealAll() {
+  document.querySelectorAll('.card').forEach(c => c.classList.add('revealed'));
+}
 </script>
 </body>
 </html>
