@@ -16,7 +16,7 @@ import csv
 
 from flask import Flask, render_template_string
 
-CSV_PATH = "output.csv"
+CSV_PATH = "playlist_tracks.csv"
 
 app = Flask(__name__)
 
